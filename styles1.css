@@ -1,1 +1,102 @@
+/* Global Styles */
+body {
+    background: linear-gradient(to right, #e3f2fd, #bbdefb); /* Light blue gradient background */
+    font-family: Arial, sans-serif; /* Font family */
+    color: #333; /* Text color */
+}
+
+/* Navbar Styles */
+.navbar {
+    background: linear-gradient(135deg, #3949ab, #1e88e5); /* Gradient background for navbar */
+    padding: 1rem 2rem; /* Padding for navbar */
+}
+.navbar-brand {
+    font-size: 1.8rem; /* Font size for brand name */
+    font-weight: bold; /* Bold font for brand name */
+}
+.navbar .btn-secondary {
+    background-color: #4b79a1; /* Background color for secondary button */
+    border: none; /* No border */
+    font-weight: 600; /* Font weight */
+}
+.navbar .btn-outline-light {
+    color: #ffffff; /* Text color for outline button */
+    border-color: #ffffff; /* Border color for outline button */
+}
+.navbar .btn-outline-light:hover {
+    background-color: #ffffff; /* Background color on hover */
+    color: #3949ab; /* Text color on hover */
+}
+
+/* Container and Form Styles */
+.container h1 {
+    font-weight: 700; /* Font weight for heading */
+    color: #2c3e50; /* Text color */
+}
+#libraryForm {
+    background: #ffffff; /* Background color for form */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ddd; /* Border color */
+    padding: 2rem; /* Padding for form */
+}
+#libraryForm .form-label {
+    font-weight: bold; /* Bold font for labels */
+    color: #2c3e50; /* Text color for labels */
+}
+#libraryForm .form-control {
+    border-radius: 5px; /* Rounded corners for inputs */
+    transition: border-color 0.3s; /* Transition effect for focus */
+}
+#libraryForm .form-control:focus {
+    border-color: #3949ab; /* Border color on focus */
+}
+#libraryForm .btn-primary {
+    background: linear-gradient(135deg, #3949ab, #1e88e5); /* Gradient background for primary button */
+    border: none; /* No border */
+    font-weight: bold; /* Bold font for button */
+    transition: background 0.3s; /* Transition effect for background */
+}
+#libraryForm .btn-primary:hover {
+    background: linear-gradient(135deg, #1e88e5, #3949ab); /* Background on hover */
+}
+
+/* Table Styles */
+#table h1 {
+    font-weight: 700; /* Font weight for table title */
+    color: #2c3e50; /* Text color */
+    border-bottom: 2px solid #3949ab; /* Bottom border for table title */
+    display: inline-block; /* Inline block for spacing */
+    margin-bottom: 1rem; /* Margin below the title */
+}
+.table {
+    background: #ffffff; /* Background color for table */
+    border-radius: 8px; /* Rounded corners for table */
+    overflow: hidden; /* Hide overflow */
+}
+.table thead {
+    background: #3949ab; /* Background color for table header */
+    color: #ffffff; /* Text color for header */
+    font-weight: bold; /* Bold font for header */
+    font-size: 1.1rem; /* Font size for header */
+}
+.table tbody tr {
+    transition: background-color 0.3s; /* Transition effect for row hover */
+}
+.table tbody tr:hover {
+    background-color: #f1f1f1; /* Background color on row hover */
+}
+.table tbody td {
+    vertical-align: middle; /* Center align content in cells */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.5rem; /* Reduced font size for smaller screens */
+    }
+    #libraryForm,
+    #table {
+        padding: 1rem; /* Reduced padding for smaller screens */
+    }
+}
 
