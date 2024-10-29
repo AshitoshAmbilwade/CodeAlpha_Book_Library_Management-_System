@@ -7,10 +7,8 @@ class Borrowing {
 
 class Display {
     static addToBorrowingHistory(borrowing) {
-        let historyTableBody = document.getElementById('historyTableBody');
-        historyTableBody.innerHTML = '';
-        
-        let uiString = `<tr>
+        const historyTableBody = document.getElementById('historyTableBody');
+        const uiString = `<tr>
                             <td>${borrowing.bookName}</td>
                             <td>${borrowing.borrower.name}</td>
                             <td>${borrowing.borrower.rollNo}</td>
@@ -20,33 +18,27 @@ class Display {
     }
 
     static saveToLocalStorage(borrowing) {
-        let borrowings = Display.getBorrowingHistoryFromLocalStorage();
+        const borrowings = Display.getBorrowingHistoryFromLocalStorage();
         borrowings.push(borrowing);
         localStorage.setItem('borrowings', JSON.stringify(borrowings));
     }
 
     static getBorrowingHistoryFromLocalStorage() {
-        let borrowings = localStorage.getItem('borrowings');
-        if (borrowings === null) {
-            return []; 
-        } else {
-            return JSON.parse(borrowings);
-        }
+        const borrowings = localStorage.getItem('borrowings');
+        return borrowings ? JSON.parse(borrowings) : []; 
     }
 
     static displayBorrowingHistory() {
-        let borrowings = Display.getBorrowingHistoryFromLocalStorage();
-        borrowings.forEach(function(borrowing) {
-            Display.addToBorrowingHistory(borrowing);
-        });
+        const borrowings = Display.getBorrowingHistoryFromLocalStorage();
+        borrowings.forEach(borrowing => Display.addToBorrowingHistory(borrowing));
     }
 
     static populateBookSelect() {
         const bookSelect = document.getElementById('bookSelect');
-        let books = Display.getBooksFromLocalStorage();
+        const books = Display.getBooksFromLocalStorage();
 
-        books.forEach(function(book) {
-            let option = document.createElement('option');
+        books.forEach(book => {
+            const option = document.createElement('option');
             option.value = book.name; 
             option.textContent = book.name;
             bookSelect.appendChild(option);
@@ -54,15 +46,12 @@ class Display {
     }
 
     static getBooksFromLocalStorage() {
-        let books = localStorage.getItem('books'); 
-        if (books === null) {
-            return [];
-        } else {
-            return JSON.parse(books); 
-        }
+        const books = localStorage.getItem('books'); 
+        return books ? JSON.parse(books) : []; 
     }
 }
 
+// Event listeners for signup and logout
 document.getElementById('signupBtn').addEventListener('click', () => {
     const username = prompt("Enter username for signup:");
     const password = prompt("Enter password for signup:");
@@ -80,34 +69,47 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
     checkLoginStatus(); 
 });
 
-let borrowForm = document.getElementById('borrowForm');
+// Borrow form submission
+const borrowForm = document.getElementById('borrowForm');
 borrowForm.addEventListener('submit', borrowFormSubmit);
 
 function borrowFormSubmit(e) {
+    e.preventDefault(); // Prevent form from submitting
 
-    let bookName = document.getElementById('bookSelect').value; 
-    let borrowerName = document.getElementById('borrowerName').value;
-    let rollNo = document.getElementById('rollNo').value;
-    let department = document.getElementById('department').value; 
+    const bookName = document.getElementById('bookSelect').value; 
+    const borrowerName = document.getElementById('borrowerName').value;
+    const rollNo = document.getElementById('rollNo').value;
+    const department = document.getElementById('department').value; 
 
-    let borrower = {
+    // Validate user input
+    if (!bookName || !borrowerName || !rollNo || !department) {
+        alert("Please fill out all fields.");
+        return; // Stop execution if validation fails
+    }
+
+    const borrower = {
         name: borrowerName,
         rollNo: rollNo,
         department: department
     };
 
-    let borrowing = new Borrowing(bookName, borrower); 
+    const borrowing = new Borrowing(bookName, borrower); 
 
     Display.saveToLocalStorage(borrowing);
     Display.addToBorrowingHistory(borrowing);
-
     borrowForm.reset();
 }
 
+// Filtering borrowing history
 function filterBorrowingHistory() {
     const searchQuery = document.getElementById('searchBar').value.toLowerCase();
     const historyTableBody = document.getElementById('historyTableBody'); 
     const rows = historyTableBody.getElementsByTagName('tr'); 
+
+    // Reset display for all rows before filtering
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].style.display = '';
+    }
 
     for (let i = 0; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName('td');
@@ -124,6 +126,7 @@ function filterBorrowingHistory() {
     }
 }
 
+// Check login status
 function checkLoginStatus() {
     const isLoggedIn = localStorage.getItem('loggedIn');
     const borrowForm = document.getElementById('borrowForm');
@@ -158,7 +161,7 @@ function checkLoginStatus() {
     }
 }
 
-
+// Initial setup on page load
 document.addEventListener('DOMContentLoaded', () => {
     Display.displayBorrowingHistory();
     Display.populateBookSelect();
