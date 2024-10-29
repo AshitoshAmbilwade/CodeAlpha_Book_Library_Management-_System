@@ -24,16 +24,11 @@ class Display {
     }
 
     clear() {
-        let libraryForm = document.getElementById('libraryForm');
-        libraryForm.reset();
+        document.getElementById('libraryForm').reset();
     }
 
     validate(book) {
-        if (book.name.length < 2 || book.author.length < 2) {
-            return false;
-        } else {
-            return true;
-        }
+        return book.name.length >= 2 && book.author.length >= 2;
     }
 
     show(type, displayMessage) {
@@ -45,9 +40,7 @@ class Display {
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>`;
-        setTimeout(function () {
-            message.innerHTML = '';
-        }, 5000);
+        setTimeout(() => { message.innerHTML = ''; }, 5000);
     }
 
     static saveToLocalStorage(book) {
@@ -62,16 +55,12 @@ class Display {
 
     static getBooksFromLocalStorage() {
         let books = localStorage.getItem('books');
-        if (books === null) {
-            return [];
-        } else {
-            return JSON.parse(books);
-        }
+        return books === null ? [] : JSON.parse(books);
     }
 
     static displayBooksFromLocalStorage() {
         let books = Display.getBooksFromLocalStorage();
-        books.forEach(function(book, index) {
+        books.forEach((book, index) => {
             let display = new Display();
             display.add(book, index);
         });
@@ -82,30 +71,28 @@ function deleteBook(index) {
     let books = Display.getBooksFromLocalStorage();
     books.splice(index, 1);
     Display.updateLocalStorage(books);
-
+    
+    // Remove the row from the UI
     let row = document.getElementById(`row-${index}`);
     row.remove();
-
+    
+    // Refresh the table
     document.getElementById('tableBody').innerHTML = ''; 
     Display.displayBooksFromLocalStorage(); 
 }
-
 
 function editBook(index) {
     let books = Display.getBooksFromLocalStorage();
     let book = books[index];
 
+    // Fill the form with the book details
     document.getElementById('bookName').value = book.name;
     document.getElementById('author').value = book.author;
 
-    if (book.type === 'Fiction') {
-        document.getElementById('fiction').checked = true;
-    } else if (book.type === 'Programming') {
-        document.getElementById('programming').checked = true;
-    } else if (book.type === 'Novels') {
-        document.getElementById('novels').checked = true;
-    }
+    // Check the type radio buttons
+    document.querySelector(`input[name="type"][value="${book.type}"]`).checked = true;
 
+    // Remove the book before adding it again
     deleteBook(index);
 }
 
@@ -113,21 +100,13 @@ let libraryForm = document.getElementById('libraryForm');
 libraryForm.addEventListener('submit', libraryFormSubmit);
 
 function libraryFormSubmit(e) {
+    e.preventDefault();
+    
     console.log('You have submitted the library form');
+    
     let name = document.getElementById('bookName').value;
     let author = document.getElementById('author').value;
-    let type;
-    let fiction = document.getElementById('fiction');
-    let programming = document.getElementById('programming');
-    let novels = document.getElementById('novels');
-
-    if (fiction.checked) {
-        type = fiction.value;
-    } else if (programming.checked) {
-        type = programming.value;
-    } else if (novels.checked) {
-        type = novels.value;
-    }
+    let type = document.querySelector('input[name="type"]:checked').value;
 
     let book = new Book(name, author, type);
     console.log(book);
@@ -139,13 +118,11 @@ function libraryFormSubmit(e) {
         display.add(book, books.length);
         display.clear();
         display.show('success', 'Your book has been successfully added');
-
         Display.saveToLocalStorage(book);
     } else {
         display.show('danger', 'Sorry you cannot add this book');
     }
-
-    e.preventDefault();
 }
 
+// Display books when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', Display.displayBooksFromLocalStorage);
